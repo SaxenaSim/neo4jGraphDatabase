@@ -21,6 +21,15 @@ class DataPopulation:
                 """
                 result = session.run(query)
                 print(result)
+                for record in result:
+                    #print(record)
+                    consumer = record['c']
+                    relationship = record['r']
+                    business = record['b']
+                    print(f"Consumer: {consumer['name']}, Age: {consumer['age']}")
+                    print(f"Relationship: {relationship.type}")
+                    print(f"Business: {business['name']}, Industry: {business['industry']}")
+                    print('-' * 20)
         except Exception as e:
             print(f"An error occurred: {e}")
         finally:
