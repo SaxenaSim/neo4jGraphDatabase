@@ -1,11 +1,31 @@
-business_id,name,industry
-1,"TechCorp","Technology"
-2,"HealthPlus","Healthcare"
-3,"Foodies","Food & Beverage"
-4,"FashionHub","Fashion"
-5,"AutoWorld","Automotive"
-6,"HomeDecor","Home & Living"
-7,"TravelWise","Travel & Tourism"
-8,"SportsZone","Sports & Fitness"
-9,"BookHaven","Books & Literature"
-10,"ArtGallery","Arts & Entertainment"
+business_id,name,domain_purchased
+1,Neilla Hewlings,vistaprint.com
+2,Romy Dosdale,gizmodo.com
+3,Ronalda Stickles,seattletimes.com
+4,Baron Frensche,msu.edu
+5,Revkah Waddup,squidoo.com
+6,Devi Lownie,psu.edu
+7,Suellen Hedney,about.me
+8,Arlin Toomey,google.ca
+9,Brian Capeling,nba.com
+10,Galina Honig,senate.gov
+11,Adelice Ridsdole,paginegialle.it
+12,Traci Augar,w3.org
+13,Johnathon Matson,marketwatch.com
+14,Sal Treble,amazon.co.uk
+15,Dennis Legerton,i2i.jp
+16,Francine Swyndley,livejournal.com
+17,Hermia Wingar,tinyurl.com
+18,Currie Simonard,hp.com
+19,Warden Ceci,themeforest.net
+20,Tessi d'Escoffier,prnewswire.com
+21,Zuzana Sparshett,nytimes.com
+22,Mady Gammie,house.gov
+23,Farlee Walkington,hubpages.com
+24,Vickie McIlwrath,comcast.net
+25,Clarette Christoffels,51.la
+26,Morgun Fairlam,cdbaby.com
+27,Kimmie Shiels,thetimes.co.uk
+28,Tobiah Wennam,sfgate.com
+29,Puff Whiffen,blogspot.com
+30,Zed Phythien,prlog.org

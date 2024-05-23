@@ -29,7 +29,7 @@ class CSVLoader:
         query = """
         LOAD CSV WITH HEADERS FROM 'file:///home/user1/Desktop/neo4jGraphDatabase/data/consumers.csv' AS row
         MERGE (c:Consumer {consumer_id: toInteger(row.consumer_id)})
-        ON CREATE SET c.name = row.name, c.age = toInteger(row.age);
+        ON CREATE SET c.name = row.name, c.age = toInteger(row.age), c.email = row.email, c.gender = row.gender , c.business_id = toInteger(row.business_id);
         """
         tx.run(query)
         logger.info("Executed Consumer query")
@@ -37,14 +37,14 @@ class CSVLoader:
         query = """
         LOAD CSV WITH HEADERS FROM 'file:///home/user1/Desktop/neo4jGraphDatabase/data/business.csv' AS row
         MERGE (b:Business {business_id: toInteger(row.business_id)})
-        ON CREATE SET b.name = row.name, b.industry = row.industry;
+        ON CREATE SET b.name = row.name, b.domain_purchased = row.domain_purchased;
         """
         tx.run(query)
         logger.info("Executed Business query")
         # Creating relationships between consumers and businesses
         query = """
         MATCH (c:Consumer), (b:Business)
-        WHERE c.consumer_id = toInteger(b.business_id)
+        WHERE c.business_id = toInteger(b.business_id)
         MERGE (c)-[:HAS_BUSINESS_OF]->(b);
         """
         tx.run(query)
