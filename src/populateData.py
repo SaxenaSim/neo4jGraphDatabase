@@ -1,6 +1,8 @@
 from driver import Driver
+from log import Logger
 
 class DataPopulation:
+    logger = Logger.createlogger()
     
     @classmethod
     def initialize(cls):
@@ -20,10 +22,10 @@ class DataPopulation:
                 RETURN c, r, b
                 """
                 result = session.run(query)
-                print(result)
+                cls.logger.debug(result)
                 
         except Exception as e:
-            print(f"An error occurred: {e}")
+            cls.logger.debug(f"An error occurred: {e}")
         finally:
             # Ensure the driver is closed
             Driver.close()

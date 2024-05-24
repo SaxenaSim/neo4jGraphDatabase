@@ -24,7 +24,7 @@ handlers:
   file_handler:
     class: logging.FileHandler
     formatter: simple
-    filename: /home/user1/Desktop/cypherQueryGeneration/logs/my_logfile.log
+    filename: /home/user1/Desktop/neo4jGraphDatabase/logs/my_logfile.log
 
 root:
   level: DEBUG
