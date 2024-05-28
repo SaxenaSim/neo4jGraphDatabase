@@ -9,7 +9,7 @@ load_dotenv()
 class CSVLoader:
 
     @staticmethod
-    def load_csv_data(tx) -> None:
+    def load_csv_data(tx):
         logger = Logger.getlogger()
         logger.debug("entering into loader method")
         # Loading consumers data
