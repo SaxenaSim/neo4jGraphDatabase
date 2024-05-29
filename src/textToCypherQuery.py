@@ -131,7 +131,7 @@ class textToCypher:
         
 if __name__ == "__main__":
             
-    textInput = "Give me the businesses with id=8"
+    textInput = "Give me the list of consumers whose business is Arlin Toomey"
     
     text_to_cypher = textToCypher(textInput)
     text_to_cypher.run()
