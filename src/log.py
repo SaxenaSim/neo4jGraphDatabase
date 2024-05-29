@@ -2,7 +2,7 @@ import os , yaml
 import logging , logging.config
 
 class Logger:
-    _logger = None
+    logger = None
     
     @classmethod
     def createlogger(cls):
@@ -16,11 +16,11 @@ class Logger:
             config = yaml.safe_load(f.read())
             logging.config.dictConfig(config)
 
-        cls._logger = logging.getLogger(__name__)
+        cls.logger = logging.getLogger(__name__)
 
     @classmethod
     def getlogger(cls):
-        if cls._logger is None:
+        if cls.logger is None:
             cls.createlogger()
-        return cls._logger
+        return cls.logger
         

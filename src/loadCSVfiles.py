@@ -41,7 +41,6 @@ class CSVLoader:
         
 if __name__ == "__main__":
     try:
-        print("entering into try method")
         # Initialize the Neo4j driver
         if not Driver.get_driver():
             Driver.initialize()
@@ -51,9 +50,7 @@ if __name__ == "__main__":
         
         # Open a session and execute the CSV loading queries within a transaction
         with driver.session() as session:
-            print("session opened")
             session.execute_write(CSVLoader.load_csv_data)
-            print("method called")
             
     except Exception as e:
         print(f"An error occurred: {e}")

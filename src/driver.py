@@ -7,7 +7,7 @@ from log import Logger
 load_dotenv()
 
 class Driver:
-    _driver = None
+    driver = None
     logger = Logger.getlogger()
 
     @classmethod
@@ -18,23 +18,23 @@ class Driver:
         password = os.getenv("NEO4J_PASSWORD")
         
         # Establish connection to Neo4j database
-        cls._driver = GraphDatabase.driver(uri, auth=(user, password))
+        cls.driver = GraphDatabase.driver(uri, auth=(user, password))
         cls.logger.info("Connecting to Neo4j...")
 
     @classmethod
     def close(cls):
         # Close the Neo4j driver connection
-        if cls._driver:
-            cls._driver.close()
-            cls._driver = None
+        if cls.driver:
+            cls.driver.close()
+            cls.driver = None
             cls.logger.info("Closing Neo4j connection.")
     
     @classmethod
-    def get_driver(cls) -> bd:
+    def get_driver(cls):
         # Return the Neo4j driver
-        if cls._driver is None:
+        if cls.driver is None:
             cls.initialize()
-        return cls._driver
+        return cls.driver
 
 if __name__ == "__main__":
     Driver.initialize()

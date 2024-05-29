@@ -24,8 +24,8 @@ class Neo4jQueryTool(BaseTool):
     
 # Main class to handle text to Cypher query conversion and execution
 class textToCypher:
-    def __init__(self):
-        # Define the schema for the Neo4j database
+    def __init__(self,text_input):
+        #Define the schema for the Neo4j database
         self.schema = """
         {
             "nodes": {
@@ -44,78 +44,96 @@ class textToCypher:
                 }
             }
         }
-        """
+        """,
+        self.input=text_input
         # Initialize logger
         self.logger = Logger.getlogger()
         self.logger.info("textToCypher initialized")
         
     # Method to create agents for task execution
-    def create_agents(self):
+    def createAgents(self):
+        
         self.logger.info("Creating agents with schema")
         # Create agent for converting text to Cypher query
-        obj_agent = Agent(
+        creation_agent = Agent(
             role="Conversion of Text to Cypher",
-            goal="Convert the given input into a cypher query of Neo4j that exactly matches with the names and spelling of the nodes and relationships of the schema",
-            backstory=(f"You are working on a Neo4j database with the following schema: {self.schema}"),
+            goal="""
+                    Convert the given input into a cypher query of Neo4j 
+                    that exactly matches with the names and spelling of the nodes and 
+                    relationships of the schema
+                 """,
+            backstory="You are working on a Neo4j database with the following schema:{schema}",
+            
         )
         # Create agent for executing the Cypher query       
         execution_agent = Agent(
             role="Execution of Cypher query",
-            goal="Execute the cypher query generated from the input text in neo4j database and get the output.",
-            backstory=("You have the access to the neo4j database and can execute queries to retrieve data."),
+            goal="""
+                    Execute the cypher query generated from the input text in neo4j
+                    database and get the output.
+                 """,
+            backstory=("""
+                        You have the access to the neo4j database 
+                        and can execute queries to retrieve data.
+                       """),
         )
         self.logger.info("Agents created successfully")
-        return obj_agent , execution_agent
+        return creation_agent , execution_agent
 
     # Method to create tasks for agents
-    def create_tasks(self,obj_agent,execution_agent):
+    def createTasks(self,creation_agent,execution_agent):
         self.logger.info("Creating tasks for agents")
         # Create tool object for query execution
         tool_obj=Neo4jQueryTool()
         # Task for generating Cypher query from natural language text
-        task = Task(
-            description =(
-                "You are an expert in Cypher query language. Please translate the following natural language request into a Cypher query for a Neo4j database, considering the provided schema:'Give me the list of consumers who has business as Arlin Toomey.' .Ensure all node and relationship names match the provided schema exactly."
-            ),
-            expected_output="A Cypher query generated in context to the given text input with exact node and relationship names from the schema",
+        creation_task = Task(
+            description =("""
+                You are an expert in Cypher query language. Please translate the following
+                natural language request into a Cypher query for a Neo4j database, considering 
+                the provided schema:{text_input}.Ensure all node and relationship names match 
+                the provided schema exactly.
+                """),
+            expected_output="""
+            A Cypher query generated in context to the given text input with 
+            exact node and relationship names from the schema
+            """,
             tools=[tool_obj],
-            agent=obj_agent,
+            agent=creation_agent,
         )
         # Task for executing the Cypher query and retrieving results
         execution_task = Task(
-            description=("Execute the cypher query generated in the Neo4j database and return the output of that query in the console."),
+            description=("""Execute the cypher query generated in the Neo4j database and 
+                         return the output of that query in the console.
+                         """),
             expected_output="The results of the executed cypher query.",
             tools=[tool_obj],
             agent=execution_agent
         )
         self.logger.info("Tasks created successfully")
-        return task , execution_task
+        return creation_task , execution_task
      
     # Method to run the tasks using agents and tools   
     def run(self):
         self.logger.info("Starting run method to get cypher query")
-        obj_agent, execution_agent = self.create_agents()
-        task, execution_task = self.create_tasks(obj_agent, execution_agent)
+        creation_agent, execution_agent = self.createAgents()
+        creation_task, execution_task = self.createTasks(creation_agent, execution_agent)
         # Create crew object with agents and tasks
         crew = Crew(
-            agents=[obj_agent, execution_agent],
-            tasks=[task, execution_task],
+            agents=[creation_agent, execution_agent],
+            tasks=[creation_task, execution_task],
         )
         self.logger.info("Kicking off the crew tasks")
         # Execute the tasks and get results
-        result = crew.kickoff()
+        result = crew.kickoff(inputs={"text_input":self.input,"schema":self.schema})
         self.logger.info("Crew tasks completed")
-        print(result)
+        #print(result)
         self.logger.info(f"result:{result}")
-
-        #result = crew.kickoff(inputs={"text_input": text_input})
-        #result = crew.kickoff(inputs={"text_input":"Give me the list of consumers who has business as Arlin Toomey."})
         
 if __name__ == "__main__":
             
-    #text_input = "Give me the list of consumers who has business as Arlin Toomey."
+    textInput = "Give me the businesses with id=8"
     
-    text_to_cypher = textToCypher()
+    text_to_cypher = textToCypher(textInput)
     text_to_cypher.run()
 
     # Close Neo4j connection
