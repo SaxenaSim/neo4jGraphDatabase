@@ -27,6 +27,7 @@ class queryGenerationAgent:
         except Exception as e:
             self.logger.error(f"Failed to create agent {e}")
             raise
+        #print(type(creation_agent))
         return creation_agent
         
         
@@ -54,3 +55,7 @@ class queryGenerationAgent:
             raise
         return creation_task
         
+if __name__ =="__main__":
+    obj = queryGenerationAgent()
+    result = obj.queryAgent()
+    #print(result)

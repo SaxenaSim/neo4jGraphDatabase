@@ -1,6 +1,7 @@
 import pytest
 from dotenv import load_dotenv
 from src.driver import Driver
+from src.log import Logger
 
 class TestDriver:
     # @pytest.fixture

@@ -49,3 +49,9 @@ class queryExecutionAgent:
             raise
         
         return execution_task
+    
+    
+if __name__=="__main__":
+    obj = queryExecutionAgent()
+    agent = obj.executionAgent()
+    print(type(obj.executionTask(agent)))
