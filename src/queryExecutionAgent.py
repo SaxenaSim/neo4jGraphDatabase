@@ -16,10 +16,12 @@ class queryExecutionAgent:
                         Execute the cypher query generated from the input text in neo4j
                         database and get the output.
                     """,
+                memory=True,
                 backstory=("""
                             You have the access to the neo4j database 
                             and can execute queries to retrieve data.
                         """),
+                allow_delegation=False
             )
             self.logger.info("execution agent created successfully")
         except Exception as e:

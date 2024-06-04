@@ -19,7 +19,8 @@ class CrewInstance:
         cls.crew_instance = Crew(
                     agents=[creation_agent, execution_agent],
                     tasks=[creation_task, execution_task],
-                    memory=True
+                    verbose=True,
+                    memory=True,
                 )
         
     @classmethod   

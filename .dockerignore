@@ -1,0 +1,16 @@
+__pycache__
+*.pyc
+*.pyo
+*.pyd
+.pytest_cache
+.git
+.vscode
+data/
+tests/
+.env
+README.md
+.gitignore
+flagged/
+logs/
+neo4j/
+src/example.py

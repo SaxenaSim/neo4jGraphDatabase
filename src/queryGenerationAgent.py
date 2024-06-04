@@ -16,18 +16,21 @@ class queryGenerationAgent:
             creation_agent = Agent(
                 role="Conversion of Text to Cypher",
                 goal="""
-                        Convert the given text input into a cypher query of Neo4j 
+                        Convert the given text input into a cypher query of Neo4j
                         that exactly matches with the names and spelling of the nodes and 
-                        relationships of the schema
+                        relationships of the schema.
                     """,
-                backstory="You are working on a Neo4j database with the following schema:{schema}",
+                memory=True,
+                backstory="""You are working on a Neo4j database with the following schema:{schema}.
+                            
+                          """,
                 allow_delegation=True
                 
             )
         except Exception as e:
             self.logger.error(f"Failed to create agent {e}")
             raise
-        #print(type(creation_agent))
+        print("::this is my creation object::",creation_agent)
         return creation_agent
         
         
@@ -41,7 +44,8 @@ class queryGenerationAgent:
                     You are an expert in Cypher query language. Please translate the following
                     natural language request into a Cypher query for a Neo4j database, considering 
                     the provided schema:{text_input}.Ensure all node and relationship names match 
-                    the provided schema exactly.
+                    the provided schema exactly. Also refer the previous queries in context if needed.
+                    Previous conversation with user is: {context}
                     """),
                 expected_output="""
                 A Cypher query generated in context to the given text input with 

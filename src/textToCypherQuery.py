@@ -6,22 +6,21 @@ from log import Logger
 from crewInstance import CrewInstance
 
 
+
 load_dotenv()
 open_api_key= os.getenv("OPENAI_API_KEY")
 os.environ["OPENAI_MODEL_NAME"] = 'gpt-3.5-turbo'
+context=[]
     
 # Main class to handle text to Cypher query conversion and execution
 class TextToCypher:
-    # crew_instance = None
 
-    def __init__(self,text_input):
-        #Define the schema for the Neo4j database
-        self.input=text_input
+    def __init__(self):
+        self.crew_obj = CrewInstance.get_crewInstance()
+        
         # Initialize logger
         self.logger = Logger.getlogger()
         self.logger.info("textToCypher initialized")
-        #self.obj_qe = qe()
-        #self.obj_qg = qg()
         
     def get_schema(self):
         schema = None
@@ -54,43 +53,29 @@ class TextToCypher:
             self.logger.error(ex)
             self.logger.info(schema)
         return schema
-   
+        
     # Method to run the tasks using agents and tools   
-    def run(self):
+    def run(self,text_input):
         try:
-            self.logger.info("Starting run method to get cypher query")
-            # creation_agent = self.obj_qg.queryAgent()
-            # creation_task = self.obj_qg.queryTask(creation_agent)
-            # execution_agent = self.obj_qe.executionAgent()
-            # execution_task = self.obj_qe.executionTask(execution_agent)
-
-            self.logger.info("::: Creating Crew Object :::")
-            # if TextToCypher.crew_instance is None:
-            #     self.logger.info("Initializing Crew instance")
-            #     TextToCypher.crew_instance = Crew(
-            #         agents=[creation_agent, execution_agent],
-            #         tasks=[creation_task, execution_task],
-            #         memory=True
-            #     )
-            # else:
-            #     self.logger.info("Using existing Crew instance")
-    
-            crew_obj = CrewInstance.get_crewInstance()
-            # Create crew object with agents and tasks
-            # crew = Crew(
-            #     agents=[creation_agent, execution_agent],
-            #     tasks=[creation_task, execution_task],
-            #     memory=True
-            #)
+            global context
+            self.input = text_input
+            self.logger.info("Starting run method to get cypher query")    
+            self.logger.info(f"crew instnace id created is {self.crew_obj.id}")
             self.logger.info("Kicking off the crew tasks")
             print("::: Crew tasks starting:::")
-            print(crew_obj.id)
+            print(self.crew_obj.id)
+            
             schema = self.get_schema()
-            # print(TextToCypher.crew_instance.id)
+            
+            self.logger.info(f"::context::{context}")
+            
             # Execute the tasks and get results
-            result = crew_obj.kickoff(inputs={"text_input":self.input,"schema":schema})
+            result = self.crew_obj.kickoff(inputs={"text_input":self.input,"schema":schema,"context":context[:-5]})
+            context.append(text_input)
+            
+            self.logger.info(f"::context::{context}")
             self.logger.info("Crew tasks completed")
-            print(" :: Metrics ::::",crew_obj.usage_metrics)
+            print(" :: Metrics ::::",self.crew_obj.usage_metrics)
             self.logger.info(f"result:{result}")
             
         except IOError as ioe:
@@ -106,13 +91,14 @@ if __name__ == "__main__":
     logger = Logger.getlogger()
     try:
                 
-        textInput = "Give me the list of consumers whose business name is Arlin Toomey"
+        #textInput = "Give me the list of consumers whose business name is Arlin Toomey"
         
-        text_to_cypher = TextToCypher(textInput)
-        text_to_cypher.run()
+        text_to_cypher = TextToCypher()
+        #text_to_cypher.run()
 
         # Close Neo4j connection
-        Driver.close()  
+        Driver.close()
+        
     except IOError as e:
         logger.error(e)
         
