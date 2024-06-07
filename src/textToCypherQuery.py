@@ -70,7 +70,7 @@ class TextToCypher:
             self.logger.info(f"::context::{context}")
             
             # Execute the tasks and get results
-            result = self.crew_obj.kickoff(inputs={"text_input":self.input,"schema":schema,"context":context[:-5]})
+            result = self.crew_obj.kickoff(inputs={"input_text":self.input,"schema":schema,"context":context})
             context.append(text_input)
             
             self.logger.info(f"::context::{context}")

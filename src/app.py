@@ -11,10 +11,12 @@ def process_text_to_cypher(user_input):
     global text_to_cypher
     text_to_cypher_output = text_to_cypher.run(user_input)
     logger.info(f"id of text to cypher class is {text_to_cypher}")
+    logger.info(f":::::::::::returning the output:::::::{text_to_cypher_output}")
     return text_to_cypher_output
 
 def respond(message,history):
     response = process_text_to_cypher(message)
+    logger.info(f":::::::my response:::::{response}")
     history.append((message,response))
     return history,history
 

@@ -14,23 +14,25 @@ class queryGenerationAgent:
         try:
             # Create agent for converting text to Cypher query
             creation_agent = Agent(
-                role="Conversion of Text to Cypher",
+                role="Conversion of Text to Cypher.",
                 goal="""
-                        Convert the given text input into a cypher query of Neo4j
-                        that exactly matches with the names and spelling of the nodes and 
-                        relationships of the schema.
-                    """,
+                    You are an expert in Cypher query language. 
+                    Your goal is to convert the given text in the task to a Cypher query.
+                    
+                    Text: {input_text}
+                """,
                 memory=True,
-                backstory="""You are working on a Neo4j database with the following schema:{schema}.
-                            
-                          """,
-                allow_delegation=True
-                
-            )
+                backstory="""
+                    You create queries for input text provided by the user and also update queries based on changes asked by the user.
+                    The Neo4j database schema you are working with is as follows: {schema}.
+                    Previous conversation with the user is: 
+                    {context}
+                """
+)
+
         except Exception as e:
             self.logger.error(f"Failed to create agent {e}")
             raise
-        print("::this is my creation object::",creation_agent)
         return creation_agent
         
         
@@ -39,20 +41,16 @@ class queryGenerationAgent:
         self.logger.info("Creating tasks for agents")
         try:
             # Task for generating Cypher query from natural language text
-            creation_task = Task(
-                description =("""
-                    You are an expert in Cypher query language. Please translate the following
-                    natural language request into a Cypher query for a Neo4j database, considering 
-                    the provided schema:{text_input}.Ensure all node and relationship names match 
-                    the provided schema exactly. Also refer the previous queries in context if needed.
-                    Previous conversation with user is: {context}
-                    """),
-                expected_output="""
-                A Cypher query generated in context to the given text input with 
-                exact node and relationship names from the schema
+            creation_task =  Task(
+                description="""
+                    Convert natural language into a Cypher query for a Neo4j database.
+                    Schema: Consumers (consumer_id, name, gender, email, age, business_id), Businesses (business_id, name, domain_purchased).
+                    Consumers are related to Businesses with a relationship HAS_BUSINESS_OF.
+                    Also, refer to the previous queries in context if needed.
                 """,
+                expected_output="A correct Cypher query",
                 agent=creation_agent,
-            )
+)
             
         except Exception as e:
             self.logger.error(f"Failed to create task {e}")

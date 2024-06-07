@@ -12,7 +12,7 @@ class TestQueryGenerationAgent:
         # Act
         result = agent_instance.queryAgent()
         # Assert
-        assert isinstance(result, Agent), "The result should be an instance of Agent"
+        assert isinstance(result, Agent)
         
     def test_queryAgent_notNull(self,agent_instance):
         result = agent_instance.queryAgent()
@@ -21,11 +21,11 @@ class TestQueryGenerationAgent:
 
     def test_queryTask_success(self, agent_instance):
         # Arrange
-        creation_agent = agent_instance.queryAgent()  # Assuming queryAgent works fine
+        creation_agent = agent_instance.queryAgent() 
         # Act
         result = agent_instance.queryTask(creation_agent)
         # Assert
-        assert isinstance(result, Task), "The result should be an instance of Task"
+        assert isinstance(result, Task)
         
         
     def test_queryTask_notNull(self,agent_instance):
