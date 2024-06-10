@@ -4,7 +4,7 @@ from log import Logger
 
 logger = Logger.getlogger()
 text_to_cypher = TextToCypher()
-
+global_history=[]
 
 # Function to process the input and return the result using TextToCypher class
 def process_text_to_cypher(user_input):
@@ -14,11 +14,25 @@ def process_text_to_cypher(user_input):
     logger.info(f":::::::::::returning the output:::::::{text_to_cypher_output}")
     return text_to_cypher_output
 
-def respond(message,history):
+def respond(message):
+    global global_history
     response = process_text_to_cypher(message)
     logger.info(f":::::::my response:::::{response}")
-    history.append((message,response))
-    return history,history
+    
+    print(f"Received message: {message}")
+    print(f"Generated response: {response}")
+    print(f"Current history before appending: {global_history}")
+
+    global_history.append((message, response))
+
+    print(f"Updated history: {global_history}")
+    # history.append((message,response))
+    # for i, item in enumerate(history):
+    #     logger.info(f":::::::::history element {i}:::::::{item}")
+    return global_history,global_history
+
+# def update_state_display(history):
+#     return gr.update(value=str(history))
 
 # Create the Gradio chatbot interface
 def chatbot_interface():
@@ -26,10 +40,15 @@ def chatbot_interface():
         chatbot = gr.Chatbot(label="Cypher Query Chatbot")
         user_input = gr.Textbox(label="Enter your query")
         submit_button = gr.Button("Submit")
+        # state_display = gr.Markdown(label="Conversation State")
 
-        state = gr.State([])
 
-        submit_button.click(fn=respond, inputs=[user_input,state], outputs=[chatbot,state])
+        #state = gr.State([])
+        
+
+        submit_button.click(fn=respond, inputs=[user_input], outputs=[chatbot,gr.State([])])
+        # submit_button.click(fn=update_state_display, inputs=[state], outputs=[state_display])
+
 
     return demo
 
