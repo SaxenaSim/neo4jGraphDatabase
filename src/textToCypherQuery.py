@@ -52,10 +52,13 @@ class TextToCypher:
         except Exception as ex:
             self.logger.error(ex)
             self.logger.info(schema)
+        print("::::::::::type of schema:::::::::",type(schema))
         return schema
         
     # Method to run the tasks using agents and tools   
     def run(self,text_input):
+        if not text_input:
+            raise ValueError("Input text should not be empty")
         try:
             global context
             self.input = text_input
@@ -72,6 +75,7 @@ class TextToCypher:
             # Execute the tasks and get results
             result = self.crew_obj.kickoff(inputs={"input_text":self.input,"schema":schema,"context":context})
             context.append(text_input)
+            print("::::::::type of result:::::::::::",type(result))
             
             self.logger.info(f"::context::{context}")
             self.logger.info("Crew tasks completed")
