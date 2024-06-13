@@ -4,10 +4,12 @@ import os
 from driver import Driver
 from log import Logger
 from crewInstance import CrewInstance
+import agentops
 
 
-
+#api_key=os.environ["AGENTOPS_API_KEY"]
 load_dotenv()
+#agentops.init(api_key)
 open_api_key= os.getenv("OPENAI_API_KEY")
 os.environ["OPENAI_MODEL_NAME"] = 'gpt-3.5-turbo'
 context=[]
@@ -57,6 +59,8 @@ class TextToCypher:
         
     # Method to run the tasks using agents and tools   
     def run(self,text_input):
+        #agentops.init(api_key="93ea5098-c6d6-490e-85a9-875581b2b790")
+        
         if not text_input:
             raise ValueError("Input text should not be empty")
         try:
@@ -87,8 +91,9 @@ class TextToCypher:
             raise
         except Exception as ex:
             self.logger.error(ex)
-            raise
+            raise        
         return result
+    
         
 if __name__ == "__main__":
     

@@ -7,7 +7,7 @@ logger = Logger.getlogger()
 text_to_cypher = TextToCypher()
 
 # Global variable to maintain conversation history
-global_history = []
+#global_history = []
 
 # Function to process the input and return the result using TextToCypher class
 def process_text_to_cypher(user_input):
@@ -18,25 +18,28 @@ def process_text_to_cypher(user_input):
     return text_to_cypher_output
 
 # Function to respond to user input
-def respond(message):
-    global global_history
+def respond(message,history):
+    #global global_history
     response = process_text_to_cypher(message)
     logger.info(f":::::::my response:::::{response}")
 
     # Append the new message-response pair to the global history
-    global_history.append((message, response))
+    history.append((message, response))
 
-    return global_history, global_history
+    return history, history
 
 # Create the Gradio chatbot interface
 def chatbot_interface():
     with gr.Blocks() as demo:
-        chatbot = gr.Chatbot(label="Cypher Query Chatbot",avatar_images=('https://www.techopedia.com/wp-content/uploads/2023/03/6e13a6b3-28b6-454a-bef3-92d3d5529007.jpeg','https://static.vecteezy.com/system/resources/thumbnails/005/129/844/small_2x/profile-user-icon-isolated-on-white-background-eps10-free-vector.jpg'))
+        #chatbot = gr.Chatbot(label="Cypher Query Chatbot",avatar_images=('https://www.techopedia.com/wp-content/uploads/2023/03/6e13a6b3-28b6-454a-bef3-92d3d5529007.jpeg','https://static.vecteezy.com/system/resources/thumbnails/005/129/844/small_2x/profile-user-icon-isolated-on-white-background-eps10-free-vector.jpg'))
+        chatbot = gr.Chatbot(label="Cypher Query Chatbot",avatar_images=('https://static.vecteezy.com/system/resources/thumbnails/005/129/844/small_2x/profile-user-icon-isolated-on-white-background-eps10-free-vector.jpg','https://www.techopedia.com/wp-content/uploads/2023/03/6e13a6b3-28b6-454a-bef3-92d3d5529007.jpeg'))
         user_input = gr.Textbox(label="Enter your query")
         submit_button = gr.Button("Submit")
+        
+        #state = gr.State([])
 
         # Ensure the correct function and input-output mappings
-        submit_button.click(fn=respond, inputs=[user_input], outputs=[chatbot, gr.State([])])
+        submit_button.click(fn=respond, inputs=[user_input,gr.State(value=[])], outputs=[chatbot, gr.State([])])
 
     return demo
 
