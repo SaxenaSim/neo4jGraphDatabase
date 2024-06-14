@@ -5,11 +5,10 @@ from driver import Driver
 from log import Logger
 from crewInstance import CrewInstance
 import agentops
+from langsmith import traceable
 
 
-#api_key=os.environ["AGENTOPS_API_KEY"]
 load_dotenv()
-#agentops.init(api_key)
 open_api_key= os.getenv("OPENAI_API_KEY")
 os.environ["OPENAI_MODEL_NAME"] = 'gpt-3.5-turbo'
 context=[]
@@ -57,7 +56,8 @@ class TextToCypher:
         print("::::::::::type of schema:::::::::",type(schema))
         return schema
         
-    # Method to run the tasks using agents and tools   
+    # Method to run the tasks using agents and tools
+    @traceable   
     def run(self,text_input):
         #agentops.init(api_key="93ea5098-c6d6-490e-85a9-875581b2b790")
         
@@ -78,7 +78,7 @@ class TextToCypher:
             
             # Execute the tasks and get results
             result = self.crew_obj.kickoff(inputs={"input_text":self.input,"schema":schema,"context":context})
-            context.append(text_input)
+            context.append([text_input,result])
             print("::::::::type of result:::::::::::",type(result))
             
             self.logger.info(f"::context::{context}")
@@ -95,15 +95,20 @@ class TextToCypher:
         return result
     
         
-if __name__ == "__main__":
+if __name__ == "__main__":    
     
     logger = Logger.getlogger()
     try:
                 
-        #textInput = "Give me the list of consumers whose business name is Arlin Toomey"
+        textInput = "Give me the list of consumers whose business name is Brian Capeling"
+        textInput1 = "from the above output i only want the consumer id and name"
+        
         
         text_to_cypher = TextToCypher()
-        #text_to_cypher.run()
+        result1 =text_to_cypher.run(textInput)
+        result2 =text_to_cypher.run(textInput1)
+        print(result1)
+        print(result2)
 
         # Close Neo4j connection
         Driver.close()

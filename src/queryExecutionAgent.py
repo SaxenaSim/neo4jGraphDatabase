@@ -14,7 +14,8 @@ class queryExecutionAgent:
                 role="Database Query Executor",
                 goal="Fetch the output of the Cypher query from the Neo4j database",
                 memory=True,
-                backstory="You have access to a Neo4j database with the following schema: {schema}"
+                backstory="You have access to a Neo4j database with the following schema: {schema}",
+                allow_delegation=False
 )
 
             self.logger.info("execution agent created successfully")
@@ -32,7 +33,7 @@ class queryExecutionAgent:
             # Task for executing the Cypher query and retrieving results
             execution_task = Task(
                 description="Execute the generated Cypher query in the Neo4j database, fetch the output, and print it to the console.",
-                expected_output="The result of the Cypher query should be printed in the console.",
+                expected_output="The result of the Cypher query should be printed in the console and it should be in json format only.",
                 tools=[tool_obj],
                 agent=execution_agent
 )
