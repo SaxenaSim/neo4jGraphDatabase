@@ -75,10 +75,14 @@ class TextToCypher:
             schema = self.get_schema()
             
             self.logger.info(f"::context::{context}")
-            
+            formatted_context = "\n".join([f"user: {entry['user']}\n assistant: {entry['assistant']}" for entry in context])
+
             # Execute the tasks and get results
-            result = self.crew_obj.kickoff(inputs={"input_text":self.input,"schema":schema,"context":context})
-            context.append([text_input,result])
+            result = self.crew_obj.kickoff(inputs={"input_text":self.input,"schema":schema,"context":formatted_context})
+            context.append({"user": text_input, "assistant": result})
+            #context.append([text_input,result])
+            
+            formatted_context = "\n".join([f"user: {entry['user']}\n assistant: {entry['assistant']}" for entry in context])
             print("::::::::type of result:::::::::::",type(result))
             
             self.logger.info(f"::context::{context}")
