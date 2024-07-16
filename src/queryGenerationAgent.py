@@ -1,7 +1,7 @@
 from log import Logger
 from crewai import Task , Agent
 
-class queryGenerationAgent:
+class QueryGenerationAgent:
     def __init__(self):
 
         self.logger = Logger.getlogger()
@@ -30,6 +30,8 @@ class queryGenerationAgent:
                     {context}
 
                     Use the context of previous queries to ensure continuity and relevance.Recognize refrences to previous outputs, such as 'from the above output','from same business', and similar phrases.Extract the relevant details from the previous queries to construct accurate and context-aware Cypher queries. Consider the schema and relationships while constructing the Cypher queries.
+                    
+                    Always use the 'STARTS WITH' keyword for business name matching in all queries related to business names.
                     
                     Examples of how to handle references to previous outputs:
                     1. Previous query: "MATCH (c:Consumers)-[:HAS_BUSINESS_OF]->(b:Businesses) WHERE b.name="XYZ" RETURN c"
@@ -66,6 +68,11 @@ class queryGenerationAgent:
                     Recognize and handle references to previous outputs. For example:
                     - "From the above output": Use the results of the previous query.
                     - "From the same business": Extract the relevant business information from previous context.
+
+                    Always use the 'STARTS WITH' keyword for business name matching in all queries related to business names.
+                    
+                    If specific fields are mentioned in the input, ensure to always include those fields in the query output. 
+                    For generic or simple requests like to list consumers, return the consumer ID, names, ages, genders, emails, and business names.
                 
                     Examples of how to handle references to previous outputs:
                     1. Previous query: "MATCH (c:Consumers)-[:HAS_BUSINESS_OF]->(b:Businesses) WHERE b.name="XYZ" RETURN c"
@@ -76,6 +83,8 @@ class queryGenerationAgent:
                     Follow-up query: "List the email addresses of consumers from the same business."
                     Output: "MATCH (c:Consumers)-[:HAS_BUSINESS_OF]->(b:Businesses) WHERE b.name="ABC" RETURN c.email"
                     
+                    When converting text to a Cypher query, if the task is to list consumers whose business name is specified, use the 'STARTS WITH' keyword to match business names that start with the given string.
+                    For generic requests like to list consumers, the query should return the consumer IDs, names, ages, genders, emails, and business names.
                 """,
                 expected_output="A correct and context-aware Cypher query",
                 agent=creation_agent,
@@ -89,6 +98,6 @@ class queryGenerationAgent:
 
         
 if __name__ =="__main__":
-    obj = queryGenerationAgent()
+    obj = QueryGenerationAgent()
     result = obj.queryAgent()
     #print(result)

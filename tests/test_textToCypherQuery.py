@@ -11,7 +11,7 @@ def class_instance():
 class TestTextToCypher:
     
     def test_getSchema(self,class_instance):
-        schema = class_instance.get_schema()
+        schema = class_instance.getSchema()
         assert schema is not None
         assert type(schema) == str
         
@@ -51,11 +51,23 @@ class TestTextToCypher:
         
         
     def test_run_with_sampleQuery(self,class_instance):
-        example_query = "give me the list of consumers whose business name is Arlin Toomey"
+        example_query = "give me the list of consumer names whose business name is Arlin Toomey"
+        
+        result = class_instance.run(example_query)
+        result_set = set(result)
+        
+        expected_set = {"Putnam Nelmes", "Alberto Kief", "Dermot Pactat"}
+                
+        assert result_set == expected_set
+        
+        # assert "Putnam Nelmes" in result
+        # assert "Alberto Kief" in result
+        # assert "Dermot Pactat" in result
+        
+    def test_run_with_wrongInput(self,class_instance):
+        example_query = "give me the list of consumers whose business name is Simran"
         
         result = class_instance.run(example_query)
         
-        assert "Putnam Nelmes" in result
-        assert "Alberto Kief" in result
-        assert "Dermot Pactat" in result
+        assert result == []
          

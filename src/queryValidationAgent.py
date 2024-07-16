@@ -1,13 +1,13 @@
 from log import Logger
 from crewai import Task , Agent
 
-class queryValidationAgent:
+class QueryValidationAgent:
     def __init__(self):
 
         self.logger = Logger.getlogger()
         self.logger.info("query validation agent initialized")
         
-    def ValidateAgent(self):
+    def validateAgent(self):
         self.logger.info("Creating agents with schema")
         try:
             # Create agent for converting text to Cypher query
@@ -26,6 +26,12 @@ class queryValidationAgent:
                 backstory="""
                     You are responsible for ensuring the correctness of Cypher queries generated from user inputs. 
                     You consider the context of previous interactions to maintain continuity and accuracy.
+                    Validate the query on the following parameters:
+                    1. Query is syntactically correct.
+                    2. The query is relevant to the input given, considering the context of previous queries.
+                    3. If specific fields are mentioned in the input, ensure those fields are included in the query output.
+                    4. For generic or simple requests like to list consumers, return the consumer IDs, names, ages, genders, emails, and business names.
+                    If any of these parameters are not met, call the previous agent to regenerate the query.
                     
                 """,
             )
@@ -35,17 +41,22 @@ class queryValidationAgent:
         return validation_agent
 
  
-    def ValidateTask(self, validation_agent):
+    def validateTask(self, validation_agent):
         self.logger.info("Creating tasks for agents")
         try:
             # Task for generating Cypher query from natural language text
             validation_task = Task(
                 description="""
                     Your task is to validate the Cypher query generated based on the user's input 
-                    and the context of previous interactions. If the query is incorrect, call the
-                    previous agent again to ensure it accurately reflects the user's request.
+                    and the context of previous interactions. Validate the query on the following parameters:
+                    1. Query is syntactically correct.
+                    2. The query is relevant to the input given, considering the context of previous queries.
+                    3. If specific fields are mentioned in the input, ensure those fields are included in the query output.
+                    4. For generic or simple requests to list consumers, always return the consumer IDs, names, ages, genders, emails, and business names.
+                    If the query is incorrect on any of these parameters, call the previous agent again to regenerate the query, 
+                    ensuring it accurately reflects the user's request and context.
                 """,
-                expected_output="A correct and context-aware Cypher query",
+                expected_output="A validated and correct Cypher query or a regenerated query if initial validation fails",
                 agent=validation_agent,
                 #human_input=True
             )
@@ -57,6 +68,6 @@ class queryValidationAgent:
 
         
 if __name__ =="__main__":
-    obj = queryValidationAgent()
-    result = obj.queryValidateAgent()
+    obj = QueryValidationAgent()
+    result = obj.validateAgent()
     #print(result)

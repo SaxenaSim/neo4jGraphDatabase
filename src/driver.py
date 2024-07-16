@@ -30,7 +30,7 @@ class Driver:
             cls.logger.info("Closing Neo4j connection.")
     
     @classmethod
-    def get_driver(cls):
+    def getDriver(cls):
         # Return the Neo4j driver
         if cls.driver is None:
             cls.initialize()
@@ -38,6 +38,7 @@ class Driver:
 
 if __name__ == "__main__":
     Driver.initialize()
-    neo4j_driver = Driver.get_driver()
+    neo4j_driver = Driver.getDriver()
+    print(neo4j_driver._get_server_info)
 
 

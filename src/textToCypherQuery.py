@@ -17,13 +17,13 @@ context=[]
 class TextToCypher:
 
     def __init__(self):
-        self.crew_obj = CrewInstance.get_crewInstance()
+        self.crew_obj = CrewInstance.getCrewInstance()
         
         # Initialize logger
         self.logger = Logger.getlogger()
         self.logger.info("textToCypher initialized")
         
-    def get_schema(self):
+    def getSchema(self):
         schema = None
         try:
             self.logger.info("::Entering into get schema try::")
@@ -72,13 +72,14 @@ class TextToCypher:
             print("::: Crew tasks starting:::")
             print(self.crew_obj.id)
             
-            schema = self.get_schema()
+            schema = self.getSchema()
             
             self.logger.info(f"::context::{context}")
             formatted_context = "\n".join([f"user: {entry['user']}\n assistant: {entry['assistant']}" for entry in context])
 
             # Execute the tasks and get results
             result = self.crew_obj.kickoff(inputs={"input_text":self.input,"schema":schema,"context":formatted_context})
+            # self.crew_obj.
             context.append({"user": text_input, "assistant": result})
             #context.append([text_input,result])
             

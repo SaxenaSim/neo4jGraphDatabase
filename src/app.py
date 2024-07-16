@@ -7,7 +7,7 @@ logger = Logger.getlogger()
 text_to_cypher = TextToCypher()
 
 # Function to process the input and return the result using TextToCypher class
-def process_text_to_cypher(user_input):
+def processTextToCypher(user_input):
     global text_to_cypher
     try:
         text_to_cypher_output = text_to_cypher.run(user_input)
@@ -18,13 +18,13 @@ def process_text_to_cypher(user_input):
     return text_to_cypher_output
 
 
-def simple_interface():
+def simpleInterface():
     # Function to respond to user input
     def respond(message,history):
         try:
             logger.info(f":::::::::Received message::::::::::::::: {message}")
             logger.info(f"::::::::::::Current history::::::::::::: {history}")    
-            response = process_text_to_cypher(message)
+            response = processTextToCypher(message)
             logger.info(f":::::::my response:::::{response}")
 
             # Append the new message-response pair to the global history
@@ -50,7 +50,7 @@ def simple_interface():
     return demo
 
 # Launch the Gradio chatbot interface
-demo = simple_interface()
+demo = simpleInterface()
 demo.launch()
 
 
