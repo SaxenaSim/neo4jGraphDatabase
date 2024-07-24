@@ -4,9 +4,11 @@ from log import Logger
 from streamlit_agraph import agraph, Node, Edge, Config
 import json
 
+# Initialize custom classes
 text_to_cypher = TextToCypher()
 logger = Logger.getlogger()
 
+# Function to generate response
 def response_generator(user_input):
     global text_to_cypher
     text_to_cypher_output = text_to_cypher.run(user_input)
@@ -14,6 +16,7 @@ def response_generator(user_input):
     logger.info(f":::::::::::returning the output:::::::{text_to_cypher_output}")
     return text_to_cypher_output
 
+# Function to create graph data
 def create_graph_data(output_data):
     nodes = []
     edges = []
@@ -34,14 +37,17 @@ def create_graph_data(output_data):
     
     return nodes, edges
 
+# Streamlit app layout
 st.title("Simple chat")
 
+# Initialize session state
 if "messages" not in st.session_state:
     st.session_state.messages = []
 
 if "graphs" not in st.session_state:
     st.session_state.graphs = []
 
+# Display previous messages and graphs
 for idx, message in enumerate(st.session_state.messages):
     with st.chat_message(message["role"]):
         st.markdown(message["content"])
@@ -60,10 +66,10 @@ for idx, message in enumerate(st.session_state.messages):
                 hierarchical=False,
                 linkLength=400,
                 gravity=-400,
-                key=f"agraph_{idx}"
             )
             agraph(nodes=nodes, edges=edges, config=config)
 
+# Handle new user input
 if prompt := st.chat_input("Enter your query"):
     st.session_state.messages.append({"role": "user", "content": prompt})
     with st.chat_message("user"):
@@ -87,17 +93,7 @@ if prompt := st.chat_input("Enter your query"):
         if isinstance(response["results"], list):
             nodes, edges = create_graph_data(response)
             st.session_state.graphs.append((nodes, edges))
-            #st.write("Nodes:", nodes)
-            #st.write("Edges:", edges)
-        else:
-            st.write("The 'results' key is not a list.")
-    else:
-        st.write("The 'results' key is missing or response is not a dictionary.")
-
-    # Re-render the current graphs after appending to session state
-    for idx, message in enumerate(st.session_state.messages):
-        if idx < len(st.session_state.graphs):
-            nodes, edges = st.session_state.graphs[idx]
+            # Display only the new graph
             config = Config(
                 width=1000,
                 height=800,
@@ -111,9 +107,13 @@ if prompt := st.chat_input("Enter your query"):
                 hierarchical=False,
                 linkLength=400,
                 gravity=-400,
-                key=f"agraph_{idx}"
+                key=f"agraph_new_{len(st.session_state.graphs) - 1}"
             )
             agraph(nodes=nodes, edges=edges, config=config)
+        else:
+            st.write("The 'results' key is not a list.")
+    else:
+        st.write("The 'results' key is missing or response is not a dictionary.")
 
 
 
