@@ -1,9 +1,16 @@
 from crewai import Agent ,Task
 from tool import Neo4jQueryTool
 from log import Logger
+from langchain_openai import ChatOpenAI
+
+# from dotenv import load_dotenv
+# import os 
+
+# load_dotenv()
 
 class QueryExecutionAgent:
     def __init__(self):
+
         self.logger = Logger.getlogger()
         self.logger.info("queryExecution agent initialized")
         
@@ -15,7 +22,10 @@ class QueryExecutionAgent:
                 goal="Fetch the output of the Cypher query from the Neo4j database",
                 memory=True,
                 backstory="You have access to a Neo4j database with the following schema: {schema}",
-                allow_delegation=False
+                allow_delegation=False,
+                # llm=ChatOpenAI(
+                #     temperature=0, model_name="gpt-3.5-turbo", api_key=open_api_key
+                # )
 )
 
             self.logger.info("execution agent created successfully")

@@ -1,5 +1,13 @@
 from log import Logger
 from crewai import Task , Agent
+from langchain_openai import ChatOpenAI
+
+# from dotenv import load_dotenv
+# import os 
+
+# load_dotenv()
+
+# open_api_key= os.getenv("OPENAI_API_KEY")
 
 class QueryGenerationAgent:
     def __init__(self):
@@ -43,6 +51,9 @@ class QueryGenerationAgent:
                     Output: "MATCH (c:Consumers)-[:HAS_BUSINESS_OF]->(b:Businesses) WHERE b.name="ABC" RETURN c.email"
                     
                 """,
+                # llm=ChatOpenAI(
+                #     temperature=0, model_name="gpt-3.5-turbo", api_key=open_api_key
+                # )
             )
         except Exception as e:
             self.logger.error(f"Failed to create agent {e}")

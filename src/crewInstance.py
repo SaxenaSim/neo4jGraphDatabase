@@ -17,8 +17,8 @@ class CrewInstance:
         creation_task = obj_qg.queryTask(creation_agent)
         execution_agent = obj_qe.executionAgent()
         execution_task = obj_qe.executionTask(execution_agent)
-        #validate_agent = obj_qv.validateAgent()
-        #validate_task = obj_qv.validateTask(validate_agent)
+        # validate_agent = obj_qv.validateAgent()
+        # validate_task = obj_qv.validateTask(validate_agent)
         
         
         cls.crew_instance = Crew(
