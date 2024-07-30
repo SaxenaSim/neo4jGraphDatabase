@@ -14,7 +14,7 @@ class CSVLoader:
         logger.debug("entering into load_csv_data method")
         # Loading consumers data
         query = """
-        LOAD CSV WITH HEADERS FROM 'file:///home/user1/Desktop/neo4jGraphDatabase/data/consumers.csv' AS row
+        LOAD CSV WITH HEADERS FROM "file:///home/dvadmin/Desktop/neo4jGraphDatabase/data/consumers.csv" AS row
         MERGE (c:Consumers {consumer_id: toInteger(row.consumer_id)})
         ON CREATE SET c.name = row.name, c.age = toInteger(row.age), c.email = row.email, c.gender = row.gender , c.business_id = toInteger(row.business_id);
         """
@@ -23,7 +23,7 @@ class CSVLoader:
         logger.info(f"Executed Consumer query with results: {results}")
         # Loading business data
         query = """
-        LOAD CSV WITH HEADERS FROM 'file:///home/user1/Desktop/neo4jGraphDatabase/data/businesses.csv' AS row
+        LOAD CSV WITH HEADERS FROM "file:///home/dvadmin/Desktop/neo4jGraphDatabase/data/businesses.csv" AS row
         MERGE (b:Businesses {business_id: toInteger(row.business_id)})
         ON CREATE SET b.name = row.name, b.domain_purchased = row.domain_purchased;
         """
@@ -38,15 +38,15 @@ class CSVLoader:
         """
         tx.run(query)
         logger.info("Executed relationship between query")
-        
+       
 if __name__ == "__main__":
     try:
         # Initialize the Neo4j driver
-        if not Driver.get_driver():
+        if not Driver.getDriver():
             Driver.initialize()
         
         # Get the Neo4j driver instance
-        driver = Driver.get_driver()
+        driver = Driver.getDriver()
         
         # Open a session and execute the CSV loading queries within a transaction
         with driver.session() as session:
