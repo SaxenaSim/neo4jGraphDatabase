@@ -42,11 +42,11 @@ class CSVLoader:
 if __name__ == "__main__":
     try:
         # Initialize the Neo4j driver
-        if not Driver.get_driver():
+        if not Driver.getDriver():
             Driver.initialize()
         
         # Get the Neo4j driver instance
-        driver = Driver.get_driver()
+        driver = Driver.getDriver()
         
         # Open a session and execute the CSV loading queries within a transaction
         with driver.session() as session:
